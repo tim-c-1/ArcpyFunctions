@@ -1,6 +1,6 @@
 #exporttoDB
 
-$dupPkgPath = "M:\MGS\Coastal\Tim\DuplicateCheckingPackage\DatabaseScripts\"
+$dupPkgPath = "[insert path for text file checker]"
 
 function Get-Files {
     #Prep raw files for database entry by taking target files, filetype, and datatype (SB/SSS/etc) and writing file info to csv.
@@ -42,8 +42,7 @@ function Write-FilesDB {
         $fileType = $importCSV."file_type"
         $filePathway = $importCSV."File_pathway"
             
-        $objConnection.Open("Provider = Microsoft.ACE.OLEDB.12.0; Data Source = M:\MGS\Common\Data_Preservation\!DataPresDatabase_FY2023\DataPreservation_Tim_be.accdb")
-        # $objConnection.Open("Provider = Microsoft.ACE.OLEDB.12.0; Data Source = C:\Users\tcooney\Documents\test.accdb")
+        $objConnection.Open("Provider = Microsoft.ACE.OLEDB.12.0; Data Source = [insert backend access database path]")
 
         $objRecordset.Open("Select * From $($table)", $objConnection,$adOpenStatic,$adLockOptimistic)
 
@@ -85,8 +84,7 @@ function Write-FilesDB {
             $query = "Select count(*) from ProjectCoordinates where Survey_ID = '$SurveyID'"
             $command = New-Object System.Data.OleDB.OleDbCommand
             $connection = New-Object System.Data.OleDB.OleDbConnection
-            $connection.ConnectionString = "Provider = Microsoft.ACE.OLEDB.12.0; Data Source = M:\MGS\Common\Data_Preservation\!DataPresDatabase_FY2023\DataPreservation_Tim_be.accdb"
-            # $connection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source = C:\Users\tcooney\Documents\test.accdb"
+            $connection.ConnectionString = "Provider = Microsoft.ACE.OLEDB.12.0; Data Source = [insert backend Access database path]"
             $command.Connection = $connection
             $command.commandtext = $query
             $connection.Open()
@@ -121,7 +119,6 @@ function exporttoDB {
         $Date,
         $Datatype
     )
-    # Import-Module M:\MGS\Coastal\Tim\DuplicateCheckingPackage\DatabaseScripts\DatabaseModule.ps1 #dont need to import if it lives in the same script
     Get-Files -FilePath $filepath -FileExtension $fileextension -DataType $Datatype
     Write-FilesDB -SurveyID  $Survey_ID -Date $Date -initials $initials -tbltype $tblType -wgsLon $wgsLon -wgsLat $wgsLat
 }
