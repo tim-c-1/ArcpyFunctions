@@ -1,3 +1,4 @@
+#Read file information from folders and commit to Access database. Will read TIF information as well.
 #Add survey information to database.
 import subprocess
 # import arcpy
@@ -7,8 +8,7 @@ import numpy as np
 from pyproj import Transformer
 
 def call_powershell_script(initials, tbltype, file_path, file_extension, survey_id, survey_date, datatype, wgsLat=None, wgsLon=None, area=None):
-    script_path = "C:/Users/tcooney/Documents/scripts/#exportToDB.ps1"
-    # script_path = "M:\MGS\Coastal\Tim\DuplicateCheckingPackage\DatabaseScripts\#exporttoDB.ps1"
+    script_path = "[insert path to powershell script file]"
     args = ['powershell.exe', '-File', script_path, initials, tbltype, file_path, file_extension, survey_id, survey_date, datatype]
 
     if wgsLat is not None:
@@ -130,19 +130,6 @@ def rasterArea(raster_file):
     desc = arcpy.Describe(raster)
     spatial_ref = desc.spatialReference
     linear_unit = spatial_ref.linearUnitName
-
-    # Check if the linear units are in meters
-    # if linear_unit == "Meter":
-    #     # Linear units are already in meters, no need to project
-    #     raster_proj = raster
-    # else:
-    #     # Project the raster to a suitable coordinate system with linear units in meters
-    #     # Define the path for the projected raster
-    #     # projected_raster = "path/to/your/projected_raster.tif"
-    #     projected_raster = arcpy.ProjectRaster_management(raster, None, arcpy.SpatialReference(utm_zone), "BILINEAR")
-
-    #     # Use the projected raster for calculations
-    #     raster_proj = projected_raster
 
     # Convert raster to NumPy array
     raster_array = arcpy.RasterToNumPyArray(raster)
